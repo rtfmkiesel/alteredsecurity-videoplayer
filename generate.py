@@ -295,16 +295,14 @@ files = glob.glob(pattern)
 videos = []
 for i, video in enumerate(sorted(files)):  # Sort by number
     filename = os.path.split(video)[-1]
-    name = (
-        # Extract the name that is between the number and the file extension
-        re.compile(r"\d*-(.*)\.\w*")
-        .match(filename)
-        .groups()[0]
-    )
-    if not name:
-        print(f"Error parsing out the name of '{video}'")
+    
+    # Extract the name that is between the number and the file extension
+    match = re.compile(r"\d\d\s*-\s*(.*)\.\w*").match(filename)
+    if not match:
+        print(f"Error parsing out the name of '{video}': regex did not match")
         quit(1)
     else:
+        name = match.groups()[0]
         videos.append({"id": i + 1, "title": name, "filepath": video})
         print(f"Adding {name}")
 
